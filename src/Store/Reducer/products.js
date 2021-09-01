@@ -2,9 +2,10 @@ import {
     SET_PRODUCTS
 } from '../actions/comics';
 
+
+
 const initialState = {
-    availableProducts: [],
-    userProducts: []
+    availableProducts: []
 }
 
 export default (state = initialState, action) => {
@@ -12,7 +13,6 @@ export default (state = initialState, action) => {
         case SET_PRODUCTS:
             return {
                 availableProducts: action.products,
-                userProducts: action.userProducts
             };
     };
     return state;

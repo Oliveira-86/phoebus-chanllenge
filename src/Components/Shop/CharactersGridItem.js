@@ -12,24 +12,26 @@ const CategoryGridTile = (props) => {
     }
 
     return (
-        <View 
-            style={styles.gridItem}
+        <View style={styles.gridItem}>
 
-        >
             <TouchableCmp
                 elevation={0.8}
                 onPress={props.onSelected}
                 style={{ flex: 1 }}
             >
-                <View
-                    style={[ styles.container, {backgroundColor: props.image}]}
+                <ImageBackground
+                    style={styles.container}
+                    source={{ uri: props.image }}
+
                 >
-                    <Text style={styles.title} numberOfLines={2}>
-                        {props.name}
-                    </Text>
-                </View>
-            </TouchableCmp>
-        </View>
+
+                <Text style={styles.title} numberOfLines={2}>
+                    {props.name}
+                </Text>
+                    
+            </ImageBackground>
+                </TouchableCmp>
+        </View >
     );
 };
 
@@ -39,18 +41,20 @@ const styles = StyleSheet.create({
     gridItem: {
         width: 175,
         height: 150,
-        margin: 10
+        margin: 10,
+
+
     },
 
     container: {
         flex: 1,
-        borderRadius: 10,
         padding: 15,
+        borderRadius: 10,
 
         shadowColor: 'black',
         shadowOpacity: 0.26,
         shadowOffset: { width: 0, height: 2 },
-        
+
         elevation: 10,
 
         justifyContent: 'flex-end',

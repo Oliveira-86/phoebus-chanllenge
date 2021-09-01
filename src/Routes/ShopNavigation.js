@@ -3,10 +3,14 @@ import { View, Image } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import CharactersScreen from '../Screens/CharactersScreen';
+
 import CharactersComics, {
     screenOptions as CharactersComicsOption
 } from '../Screens/CharactersComicsScreen';
-import ComicDetailsScreen from '../Screens/ComicDetailsScreen';
+
+import ComicDetailsScreen, {
+    screenOptions as DetailsComicsOption
+} from '../Screens/ComicDetailsScreen';
 
 import Fonts from '../Styles/Fonts';
 import Colors from '../Styles/Colors';
@@ -14,9 +18,10 @@ import Colors from '../Styles/Colors';
 const StackNavigator = createStackNavigator();
 
 const ShopNavigation = () => {
+
     return (
         <StackNavigator.Navigator screenOptions={{
-            headerTitle: "Characters",
+            headerTitle: "Comics",
             headerStyle: {
                 backgroundColor: Colors.primaryColor
             },
@@ -28,7 +33,7 @@ const ShopNavigation = () => {
             headerRight: () => {
                 return (
                     <View>
-                        <Image source={require('../assets/shield.png')} 
+                        <Image source={require('../assets/shield.png')}
                             style={{ width: 40, height: 40, marginRight: 20 }}
                         />
                     </View>
@@ -47,6 +52,9 @@ const ShopNavigation = () => {
             <StackNavigator.Screen
                 name="ComicDetails"
                 component={ComicDetailsScreen}
+                options={({ route }) => ({
+                    headerTitle: route.params.comicTitle,
+                })}
             />
         </StackNavigator.Navigator>
     )
