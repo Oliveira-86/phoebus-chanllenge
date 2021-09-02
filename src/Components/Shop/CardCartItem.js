@@ -27,7 +27,7 @@ const ProductCardOrder = (props) => {
 
 
                 <Text style={styles.price}>
-                    R$ {props.price}
+                    R$ {props.price.toFixed(2)}
                 </Text>
 
                 <View style={styles.quantityContainer}>
