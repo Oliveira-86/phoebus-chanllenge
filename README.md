@@ -22,6 +22,7 @@
 
 ### Technologies
 
+##### - React-Native
 ##### - Javascript
 ##### - React-Navigation V6
 ##### - React-Redux
