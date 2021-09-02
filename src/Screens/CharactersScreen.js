@@ -1,17 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, FlatList, View, Text, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import Colors from '../Styles/Colors';
+import Fonts from '../Styles/Fonts';
 
+import ViewGradient from '../Components/UI/ViewGradient';
 import { useSelector, useDispatch } from 'react-redux';
 import * as productsActions from '../Store/actions/comics';
-
-import api from '../Services/api';
 
 const CharactersScreen = (props) => {
     const [comic, setComic] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    
+
     const products = useSelector(state => state.products.availableProducts);
+    const prodDefault = products.filter(prod => prod.id >= 1000);
+    const prodPromo = products.filter(prod => prod.id <= 1000);
+
     const dispatch = useDispatch();
 
     const loadProducts = useCallback(async () => {
@@ -22,16 +25,6 @@ const CharactersScreen = (props) => {
         }
     }, [dispatch, setIsLoading]);
 
-    // useEffect(() => {        
-    //     async function loadProviders() {
-    //         setIsLoading(true)
-    //         const response = await api.get('/v1/public/comics?ts=1&apikey=17dd4b8faf0f00eeeb6633eaaf7774bc&hash=44d49ea637270c4b188070acb9d4abb8');
-
-    //         setComic(response.data.data.results);
-    //         setIsLoading(false)
-    //     }
-    //     loadProviders();
-    // }, []);
     useEffect(() => {
         setIsLoading(true);
         loadProducts().then(() => {
@@ -49,17 +42,19 @@ const CharactersScreen = (props) => {
 
     return (
         <FlatList
-            data={products}
+            style={{ backgroundColor: 'rgba(0, 0, 0, 0.9)', flex: 1 }}
+            data={prodDefault}
             numColumns={2}
             renderItem={(itemData) => (
                 <View style={{
                     flex: 1, padding: 5, borderRadius: 4
                 }}>
                     <TouchableOpacity onPress={() => props.navigation.navigate(
-                        'ComicDetails',
+                        'Details',
                         {
                             comicId: itemData.item.id,
-                            comicTitle: itemData.item.title
+                            comicTitle: itemData.item.title,
+                            comicPrice: itemData.item.price
                         }
                     )}>
                         <Image
@@ -71,31 +66,124 @@ const CharactersScreen = (props) => {
                             source={{ uri: itemData.item.image }}
                         />
                     </TouchableOpacity>
-                    <Text numberOfLines={1} style={styles.TextTitleComic}>{comic.title}</Text>
+                    <Text numberOfLines={1} style={styles.TextTitleComic}>{itemData.item.title}</Text>
                 </ View>
             )}
             keyExtractor={(item) => item.id}
+            ListHeaderComponent={() => (
+                <>
+                    <View style={{ padding: 20 }}>
+                        <Text style={{ color: 'white', fontFamily: Fonts.bold, fontSize: 22 }}>
+                            Comics Deals
+                        </Text>
+                    </View>
+                    <FlatList
+                        data={prodPromo}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={(itemData) => (
+                            <TouchableOpacity onPress={() => props.navigation.navigate(
+                                'Details',
+                                {
+                                    comicId: itemData.item.id,
+                                    comicTitle: itemData.item.title,
+                                    comicPrice: itemData.item.price
+                                }
+                            )}>
+                                <View style={styles.userContainer}>
+                                    <ViewGradient
+                                        style={styles.imageContainer}
+                                        source={{ uri: itemData.item.image }}
+                                        styleImage={styles.image}
+                                        image={true}
+                                    />
+
+                                </View>
+                                <ViewGradient
+                                    style={styles.promoContainer}
+                                    styleText={{ color: 'white', fontFamily: Fonts.bold }}
+                                    text={true}
+                                    title="-10%"
+                                />
+                            </TouchableOpacity>
+                        )}
+
+                    />
+                    <View style={{ padding: 20 }}>
+                        <Text style={{ color: 'white', fontFamily: Fonts.bold, fontSize: 22 }}>
+                            Comics
+                        </Text>
+                    </View>
+                </>
+            )}
         />
     );
 };
+
+export const screenOptions = () => {
+    return {
+        headerRight: () => {
+            return (
+                <View>
+                    <Image source={require('../assets/shield.png')}
+                        style={{ width: 40, height: 40, marginRight: 20 }}
+                    />
+                </View>
+            )
+        }
+    }
+}
 
 export default CharactersScreen;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#eee'
+        backgroundColor: 'rgba(0, 0, 0, 0.7)'
     },
     TextTitleComic: {
         width: 120,
-        fontSize: 13,
-        color: '#333',
-        fontWeight: 'bold',
+        fontSize: 15,
+        color: 'white',
+        fontFamily: Fonts.bold,
         marginTop: 4,
+        marginBottom: 10
     },
     centered: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    userContainer: {
+        alignItems: 'center',
+        marginHorizontal: 5,
+        top: -20
+    },
+
+    imageContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 104,
+        height: 104,
+        borderRadius: 50,
+        marginTop: 37
+    },
+
+    image: {
+        width: 97,
+        height: 97,
+        borderRadius: 50,
+        borderWidth: 3,
+        borderColor: 'white'
+    },
+    promoContainer: {
+        width: 40,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: -140,
+        left: 80,
+        padding: 3
     }
+
 })

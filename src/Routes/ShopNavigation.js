@@ -1,60 +1,59 @@
 import React from 'react';
-import { View, Image } from 'react-native';
+import { Image } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import CharactersScreen from '../Screens/CharactersScreen';
+import CharactersScreen, {
+    screenOptions as CharactersOptions
+} from '../Screens/CharactersScreen';
 
-import CharactersComics, {
-    screenOptions as CharactersComicsOption
-} from '../Screens/CharactersComicsScreen';
+import CartScreen, {
+    screenOptions as CartOptions
+} from '../Screens/CartScreen';
 
 import ComicDetailsScreen, {
-    screenOptions as DetailsComicsOption
+    screenOptions as DetailsComicsOptions
 } from '../Screens/ComicDetailsScreen';
 
-import Fonts from '../Styles/Fonts';
 import Colors from '../Styles/Colors';
+
+const navigationOptions = () => {
+    return {
+        headerStyle: {
+            backgroundColor: Colors.primaryColor
+        },
+        headerTitle: () => {
+            return (
+                <Image 
+                    source={{ uri: 'https://http2.mlstatic.com/D_NQ_NP_833737-MLB29362223977_022019-O.jpg'}}
+                    style={{ width: 130, height: 70, top: -15 }}
+                />
+            )
+        },
+        headerTintColor: 'white',
+       
+    }
+}
 
 const StackNavigator = createStackNavigator();
 
 const ShopNavigation = () => {
 
     return (
-        <StackNavigator.Navigator screenOptions={{
-            headerTitle: "Comics",
-            headerStyle: {
-                backgroundColor: Colors.primaryColor
-            },
-            headerTintColor: 'white',
-            headerTitleStyle: {
-                fontFamily: Fonts.bold,
-                fontSize: 22,
-            },
-            headerRight: () => {
-                return (
-                    <View>
-                        <Image source={require('../assets/shield.png')}
-                            style={{ width: 40, height: 40, marginRight: 20 }}
-                        />
-                    </View>
-                )
-            }
-        }}>
+        <StackNavigator.Navigator screenOptions={navigationOptions}>
             <StackNavigator.Screen
                 name="Characters"
                 component={CharactersScreen}
+                options={CharactersOptions}
             />
             <StackNavigator.Screen
-                name="CharactersComics"
-                component={CharactersComics}
-                options={CharactersComicsOption}
-            />
-            <StackNavigator.Screen
-                name="ComicDetails"
+                name="Details"
                 component={ComicDetailsScreen}
-                options={({ route }) => ({
-                    headerTitle: route.params.comicTitle,
-                })}
+                options={DetailsComicsOptions}
+            />
+            <StackNavigator.Screen
+                name="Cart"
+                component={CartScreen}
+                options={CartOptions}
             />
         </StackNavigator.Navigator>
     )

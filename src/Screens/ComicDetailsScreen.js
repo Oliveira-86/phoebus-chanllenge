@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     Text, View,
@@ -6,20 +6,27 @@ import {
     Image, ScrollView,
     ImageBackground, ActivityIndicator
 } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import * as cartActions from '../Store/actions/cart';
+import { FontAwesome } from '@expo/vector-icons';
 
 import Fonts from '../Styles/Fonts';
+import Colors from '../Styles/Colors';
 
 import api from '../Services/api';
+import ButtonGradient from '../Components/UI/ButtonGradient';
 
-const imagemFundo = 'https://raw.githubusercontent.com/AlissonMacedo/AppMarvel-ListHQs-React-Native/master/src/assets/fundo-vingadores.jpg'
+const bgImage = 'https://raw.githubusercontent.com/AlissonMacedo/AppMarvel-ListHQs-React-Native/master/src/assets/fundo-vingadores.jpg'
 
 const ComicDetails = ({ route, navigation }) => {
     const [comic, setComic] = useState([]);
     const hero = route.params.comicId;
-    const prices = route.params.comicPrice;
     const [loading, setLoading] = useState(true);
 
-    const price = prices.map(pro => pro.price)
+    const dispatch = useDispatch();
+    const selectedComic = useSelector(state =>
+        state.products.availableProducts.find(prod => prod.id === hero)
+    );
 
     useEffect(() => {
         async function loadComic() {
@@ -36,12 +43,13 @@ const ComicDetails = ({ route, navigation }) => {
 
     return (
         <ImageBackground
-            source={{ uri: imagemFundo }}
+            source={{ uri: bgImage }}
             style={{ width: '100%', height: '100%' }}
         >
             <View style={styles.container}>
                 {loading ? (<ActivityIndicator size="large" style={{ marginTop: 300 }} color="#FFF" />) : (
                     <ScrollView style={styles.ViewTotal}>
+                        <Text numberOfLines={1} style={styles.TextTitle}>{selectedComic.title}</ Text>
                         <View style={styles.ViewImageInfo}>
                             {comic.map(provider => (
                                 <Image
@@ -60,18 +68,27 @@ const ComicDetails = ({ route, navigation }) => {
                             <View style={styles.ViewTextInfo}>
                                 <Text style={styles.TextTitle2}>Price:</ Text>
                                 <Text
-                                    style={{ color: '#FFF', fontSize: 18, fontFamily: Fonts.bold }}
+                                    style={{ color: '#FFF', fontSize: 22, fontFamily: Fonts.bold }}
                                 >
-                                    $ {price[0]}
+                                    $ {selectedComic.price.toFixed(2)}
                                 </Text>
                             </View>
-
                         </View>
+                        <ButtonGradient
+                            style={styles.buttonConainer}
+                            textStyle={{ fontSize: 18 }}
+                            text="Add To Cart"
+                            onPress={() => {
+                                dispatch(cartActions.addToCart(selectedComic));
+                            }}
+                        />
                         <View style={styles.ViewTextDescription}>
                             {comic.map(provider => (
                                 <Text key={provider.description} style={styles.TextDescription}>{provider.description}</ Text>
                             ))}
                         </View>
+
+
                     </ ScrollView>
                 )}
             </View>
@@ -79,33 +96,43 @@ const ComicDetails = ({ route, navigation }) => {
     );
 }
 
+export const screenOptions = ({ navigation }) => {
+    return {
+        headerRight: () => {
+            const currentQuantity = useSelector(state => state.cart.totalQuantity);
+            return (
+                <>
+                    
+                    <TouchableOpacity
+                        style={{ marginRight: 20 }}
+                        onPress={() => navigation.navigate('Cart')}
+                    >
+                        <FontAwesome name="shopping-cart" size={24} color="white" />
+                        {currentQuantity !== 0 && <View style={styles.dot} />}
+                    </TouchableOpacity>
+                    
+                </>
+
+            )
+        }
+    }
+}
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.7)'
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
     },
-    header: {
-        height: 90,
-        backgroundColor: '#202020',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderColor: '#707070',
-        borderLeftColor: '#202020',
-        borderRightColor: '#202020',
-        borderTopColor: '#202020',
-        borderStyle: 'solid',
-        borderWidth: 2,
 
-    },
     marvelLogo: {
         marginTop: 25,
         height: 40,
     },
     ViewTotal: {
         flex: 1,
-        flexDirection: 'column',
         paddingTop: 20,
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
+        paddingVertical: 20
     },
     TextTitle: {
         fontSize: 25,
@@ -140,6 +167,28 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#FFF',
         marginTop: 10,
+    },
+
+    buttonConainer: {
+        width: '100%',
+        marginVertical: 20,
+        marginBottom: 20,
+        padding: 10,
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
+    dot: {
+        backgroundColor: '#28FF00',
+        width: 15,
+        height: 15,
+        borderRadius: 8,
+        position: 'absolute',
+        right: -3,
+        top: -7,
+        borderWidth: 2,
+        borderColor: Colors.primaryColor
     }
 
 });

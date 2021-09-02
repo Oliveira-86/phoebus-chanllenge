@@ -1,8 +1,11 @@
 class Characters {
-    constructor(id, name, image) {
+    constructor(id, title, image, price, discount, cupom) {
       this.id = id;
-      this.name = name;
+      this.title = title;
       this.image = image;
+      this.price = price;
+      this.discount = discount;
+      this.cupom = cupom;
     }
   }
   

@@ -10,16 +10,29 @@ export const fetchProducts = () => {
         const response = await api.get('/v1/public/comics?ts=1&apikey=17dd4b8faf0f00eeeb6633eaaf7774bc&hash=44d49ea637270c4b188070acb9d4abb8');
         const resdata = response.data.data.results
 
+
         const loadedProducts = [];
+
+
         for (const key in resdata) {
-            loadedProducts.push(new Characters(
-               resdata[key].id,
-               resdata[key].title,
-               resdata[key].thumbnail.path+'.jpg'
-            ))
+            if (resdata[key].id <= 1000) {
+                loadedProducts.push(new Characters(
+                    resdata[key].id,
+                    resdata[key].title,
+                    resdata[key].thumbnail.path + '.jpg',
+                    resdata[key].prices.map(price => price.price)[0] * 0.9,                
+                ))
+            } else {
+                loadedProducts.push(new Characters(
+                    resdata[key].id,
+                    resdata[key].title,
+                    resdata[key].thumbnail.path + '.jpg',
+                    resdata[key].prices.map(price => price.price)[0],
+                ))
+
+            }
         }
-        console.log("Load PRODUCTSSSSS", loadedProducts)
-        dispatch({ type: SET_PRODUCTS, products: loadedProducts })      
+        dispatch({ type: SET_PRODUCTS, products: loadedProducts })
     }
 
 };

@@ -2,8 +2,6 @@ import {
     SET_PRODUCTS
 } from '../actions/comics';
 
-
-
 const initialState = {
     availableProducts: []
 }

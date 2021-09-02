@@ -2,10 +2,10 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 
 import { Provider } from 'react-redux';
-import comicsReducer from './src/Store/Reducer/comics';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 
+import cartReducer from './src/Store/Reducer/cart';
 import productsReducer from './src/Store/Reducer/products'
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -22,7 +22,8 @@ import AppLoading from 'expo-app-loading';
 
 
 const rootReducer = combineReducers({
-  comics: comicsReducer,
+ 
+  cart: cartReducer,
   products: productsReducer
 });
 
