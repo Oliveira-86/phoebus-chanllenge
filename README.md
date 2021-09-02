@@ -37,3 +37,13 @@
 ##### - React-Redux
 ##### - Redux-Thunk
 ##### - Expo Go
+
+## How it works
+
+#### Install dependencies
+    
+    $ yarn install
+
+#### Run the project
+
+    $ expo start
