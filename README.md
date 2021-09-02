@@ -12,13 +12,13 @@
 
 ### -------- Home Screen  -------------- Details Screen  -------------- Cart Screen ----------
 
-<p alignItem="end">
+<div alignItem="end">
   <img width="250" height="500" src="src/assets/toReadME/2021-09-02 00-02-22 (online-video-cutter.com).gif">
   
   <img width="250" height="500" src="src/assets/toReadME/2021-09-02 00-03-00 (online-video-cutter.com).gif">
   
   <img width="250" height="500" src="src/assets/toReadME/2021-09-02 00-04-06 (online-video-cutter.com).gif">
- </p> 
+ </div> 
 
 ### Technologies
 
