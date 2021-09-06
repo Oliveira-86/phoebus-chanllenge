@@ -10,7 +10,6 @@
 - We can manage the application state;
 
 
-### ------ Home Screen  ------------ Details Screen  ------------ Cart Screen -------
 
 <div alignItem="end">
   <img width="225" height="450" src="src/assets/toReadME/2021-09-02 00-02-22 (online-video-cutter.com).gif">
